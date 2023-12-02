@@ -1,0 +1,26 @@
+.build-form{
+  border: 1px solid #495057;
+  padding: 5px;
+}
+.build-form-row{
+  padding: 5px;
+}
+.build-row{
+  border: 1px solid #495057;
+}
+.build-col{
+  border: 1px solid #495057;
+  padding: 0px 3px;
+}
+.error-message{
+  color: crimson;
+}
+.page-title{
+  padding-top: 5px;
+}
+.rarity-SSR{
+  color: gold;
+}
+.rarity-SR{
+  color: mediumslateblue;
+}
