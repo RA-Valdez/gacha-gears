@@ -1,12 +1,12 @@
 // Modules
 import { useState } from 'react';
-import { Container, Navbar, Offcanvas, Nav } from 'react-bootstrap';
+import { Container, Navbar, Offcanvas, Nav, Button } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 
 // Assets
 import ggoLogo from '/ggo.svg'
 
-export default function MainNav() {
+export default function MainNav(props) {
   const [showOffcanvas, setShowOffcanvass] = useState(false);
 
   const devNav = (
@@ -35,6 +35,8 @@ export default function MainNav() {
             <LinkContainer to="/ornaments">
               <Nav.Link>Ornaments</Nav.Link>
             </LinkContainer>
+            <hr/>
+            <Button variant='outline-danger' onClick={props.handleLogout}>Logout</Button>
           </Nav>
         </Offcanvas.Body>
       </Navbar.Offcanvas>
@@ -46,9 +48,9 @@ export default function MainNav() {
       <Container>
         <Navbar.Brand href="/">
           <img src={ggoLogo} className="logo d-inline-block align-top" alt="Vite logo" />
-          {' '}GachaGears.online
+          {' '}Gacha-Gears
         </Navbar.Brand>
-        {import.meta.env.DEV ? devNav : <></>}
+        {props.username ? devNav : <></>}
       </Container>
     </Navbar>
   );

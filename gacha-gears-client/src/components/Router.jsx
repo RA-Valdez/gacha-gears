@@ -10,11 +10,10 @@ import RelicPage from '../pages/RelicPage/RelicPage'
 import OrnamentPage from '../pages/OrnamentPage/OrnamentPage'
 import NoPage from '../pages/NoPage';
 
-export default function Router() {
+export default function Router(props) {
   const devRoutes = (
     <Routes>
       <Route path="/" Component={BuildPage} />
-      <Route path="/login" Component={LogInPage} />
       <Route path='/characters' Component={CharacterPage} />
       <Route path='/zones' Component={ZonePage} />
       <Route path='/relics' Component={RelicPage} />
@@ -26,9 +25,10 @@ export default function Router() {
   const guestRoutes = (
     <Routes>
       <Route path="/" Component={BuildPage} />
+      <Route path="/login" element={<LogInPage setPublicToken={props.setPublicToken} />} />
       <Route path='*' Component={NoPage} />
     </Routes>
   )
 
-  return import.meta.env.DEV ? devRoutes : guestRoutes;
+  return props.username ? devRoutes : guestRoutes;
 }

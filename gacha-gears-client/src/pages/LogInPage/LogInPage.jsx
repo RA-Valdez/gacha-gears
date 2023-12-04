@@ -2,9 +2,11 @@ import axios from "axios";
 import { useState } from "react";
 import { Alert, Button, Col, Container, Form, Row, Stack } from "react-bootstrap";
 import { useNavigate } from "react-router-dom"
+import Cookies from 'universal-cookie';
 
-export default function LogInPage() {
+export default function LogInPage(props) {
   axios.defaults.withCredentials = true;
+  const cookies = new Cookies(null, { path: '/' });
   const [process, setProcess] = useState("Log In");
   const [username, setUsername] = useState("");
   const [validUsername, setValidUsername] = useState(false);
@@ -63,7 +65,8 @@ export default function LogInPage() {
       .post(`${import.meta.env.VITE_API_ADDRESS}/users/login`, user, { withCredentials: true })
       .then((res) => {
         clearFields();
-        navigate("/")
+        props.setPublicToken(cookies.get('public-token'));
+        navigate("/");
       })
       .catch((err) => {
         clearFields();
