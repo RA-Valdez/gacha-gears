@@ -60,8 +60,8 @@ router.post('/login', asyncHandler(async (req, res, next) => {
           .setAudience(process.env.API_AUDIENCE)
           .setExpirationTime(process.env.API_EXPIRE_TIME)
           .sign(new TextEncoder().encode(process.env.API_KEY));
-        res.cookie('token', jwt, { httpOnly: true, maxAge: 7200000 });
-        res.cookie('public-token', user[0].username, { maxAge: 7200000 });
+        res.cookie('token', jwt, { httpOnly: true, maxAge: 7200000, sameSite: 'none' });
+        res.cookie('public-token', user[0].username, { maxAge: 7200000, sameSite: 'none' });
         res.send("token sent");
       }
       else {
