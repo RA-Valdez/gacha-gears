@@ -60,8 +60,8 @@ router.post('/login', asyncHandler(async (req, res, next) => {
           .setAudience(process.env.API_AUDIENCE)
           .setExpirationTime(process.env.API_EXPIRE_TIME)
           .sign(new TextEncoder().encode(process.env.API_KEY));
-        res.cookie('token', jwt, { httpOnly: true, maxAge: 7200000, domain:process.env.CLIENT_DOMAIN, sameSite: 'none', secure: true });
-        res.cookie('public-token', user[0].username, { maxAge: 7200000, domain:process.env.CLIENT_DOMAIN, sameSite: 'none', secure: true });
+        res.cookie('token', jwt, { httpOnly: true, maxAge: 7200000, domain: process.env.CLIENT_DOMAIN, sameSite: 'none', secure: true });
+        res.cookie('public-token', user[0].username, { maxAge: 7200000, domain: process.env.CLIENT_DOMAIN, sameSite: 'none', secure: true });
         res.send("token sent");
       }
       else {
@@ -77,8 +77,8 @@ router.post('/login', asyncHandler(async (req, res, next) => {
 
 // POST log out
 router.post('/logout', (req, res) => {
-  res.clearCookie('token', {httpOnly: true});
-  res.clearCookie('public-token');
+  res.clearCookie('token', { httpOnly: true, domain: process.env.CLIENT_DOMAIN });
+  res.clearCookie('public-token', { domain: process.env.CLIENT_DOMAIN });
   res.send();
 });
 
