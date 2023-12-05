@@ -5,6 +5,7 @@ import { LinkContainer } from 'react-router-bootstrap';
 
 // Assets
 import ggoLogo from '/ggo.svg'
+import ggoWide from '/ggo-wide.svg'
 
 export default function MainNav(props) {
   const [showOffcanvas, setShowOffcanvass] = useState(false);
@@ -47,8 +48,9 @@ export default function MainNav(props) {
     <Navbar key={false} expand={false} className="bg-body-tertiary">
       <Container>
         <Navbar.Brand href="/">
-          <img src={ggoLogo} className="logo d-inline-block align-top" alt="Vite logo" />
-          {' '}Gacha-Gears
+          <img src={ggoLogo} className="logo d-inline-block align-top" alt="GachaGears.online logo" />
+          &nbsp;
+          <img src={ggoWide} className="logo d-inline-block align-top" alt="GachaGears.online" />
         </Navbar.Brand>
         {props.username ? devNav : <></>}
       </Container>

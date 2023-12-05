@@ -47,7 +47,7 @@ export default function BuildPage() {
           <Col xs={10} className="build-col"><strong>Character</strong></Col>
           <Col xs={2} className="build-col text-center"><strong>Actions</strong></Col>
           <Col xs={12} md={3} className="build-col text-center"><strong>Relic(s)</strong></Col>
-          <Col xs={12} md={2} className="build-col text-center"><strong>Ornamnet</strong></Col>
+          <Col xs={12} md={2} className="build-col text-center"><strong>Ornament</strong></Col>
           <Col xs={3} md className="build-col text-center"><strong>Body</strong></Col>
           <Col xs={3} md className="build-col text-center"><strong>Feet</strong></Col>
           <Col xs={3} md className="build-col text-center"><strong>Sphere</strong></Col>
