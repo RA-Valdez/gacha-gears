@@ -34,13 +34,19 @@ function App() {
     <BrowserRouter>
       <MainNav username={publicToken} handleLogout={handleLogout} />
       <Container>
-        <Router username={publicToken} setPublicToken={setPublicToken} /><Outlet context={[setPublicToken]}/>
+        <Router username={publicToken} setPublicToken={setPublicToken} /><Outlet context={[setPublicToken]} />
       </Container>
       <Modal show={showModal} onHide={handleModal}>
         <Modal.Header closeButton>
           <Modal.Title>Site Information</Modal.Title>
         </Modal.Header>
-        <Modal.Body>This site stores builds you add, locally to your device.</Modal.Body>
+        <Modal.Body>This site stores builds you add, locally to your device.
+          <hr /> The (Site Builds) are just general suggestion and may not be the most optimized builds. <hr /> Planned Updates:
+          <ul>
+            <li>Local Build backup and restore</li>
+            <li>Build Sorting</li>
+            <li>Stats input auto-complete</li>
+          </ul></Modal.Body>
       </Modal>
     </BrowserRouter>
   )
