@@ -31,7 +31,9 @@
 .rarity-SR {
   color: mediumslateblue;
 }
-
+.rarity {
+  color: #dee2e6;
+}
 .loader {
   border: 8px solid #343a40;
   border-top: 8px solid #6c757d;

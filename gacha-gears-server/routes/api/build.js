@@ -110,7 +110,7 @@ router.post('/ornaments/:local', asyncHandler(async (req, res, next) => {
 // Get Fields
 router.get('/fields', asyncHandler(async (req, res, next) => {
   const [characters, relics, ornaments, zones] = await Promise.all([
-    Characters.find().select("name").exec(),
+    Characters.find().select("name rarity").exec(),
     Relics.find().select("name").exec(),
     Ornaments.find().select("name").exec(),
     Zones.find().exec(),

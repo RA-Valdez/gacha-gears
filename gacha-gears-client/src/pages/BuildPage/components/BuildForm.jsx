@@ -7,6 +7,7 @@ export default function BuildForm(props) {
   axios.defaults.withCredentials = true;
   const [id, setID] = useState("");
   const [character, setCharacter] = useState("");
+  const [rarity, setRarity] = useState("");
   const [relic1, setRelic1] = useState("");
   const [relic2, setRelic2] = useState("");
   const [ornament, setOrnament] = useState("");
@@ -21,6 +22,7 @@ export default function BuildForm(props) {
 
   function clearFields() {
     setCharacter("");
+    setRarity("");
     setRelic1("");
     setRelic2("");
     setOrnament("");
@@ -108,7 +110,7 @@ export default function BuildForm(props) {
   var characterList = <></>;
   if (props.fields.characters) {
     characterList = props.fields.characters.map((character, k) =>
-      <option value={character._id} key={k}>{character.name}</option>
+      <option value={character._id} key={k} className={"rarity-" + character.rarity}>{character.name}</option>
     );
   }
   var relicList = <></>;
@@ -128,6 +130,7 @@ export default function BuildForm(props) {
     if (props.edit.isEditing) {
       setID(props.edit.build._id);
       setCharacter(props.edit.build.character._id);
+      setRarity("rarity-" + props.edit.build.character.rarity);
       setRelic1(props.edit.build.relic[0]._id);
       if (props.edit.build.relic.length > 1) setRelic2(props.edit.build.relic[1]._id);
       else setRelic2("");
@@ -157,8 +160,8 @@ export default function BuildForm(props) {
       <Row className="build-form-row">
         <Form.Label column xs="3">Character:</Form.Label>
         <Col>
-          <Form.Select value={character} ref={formRef} onChange={e => setCharacter(e.target.value)}>
-            <option value="">Select Character</option>
+          <Form.Select value={character} ref={formRef} onChange={e => { setCharacter(e.target.value); setRarity(e.target.options[e.target.options.selectedIndex].className); }} className={rarity}>
+            <option value="" className="rarity">Select Character</option>
             {characterList}
           </Form.Select>
         </Col>
