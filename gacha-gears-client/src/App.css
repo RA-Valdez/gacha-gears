@@ -1,26 +1,54 @@
-.build-form{
+.build-form {
   border: 1px solid #495057;
   padding: 5px;
 }
-.build-form-row{
+
+.build-form-row {
   padding: 5px;
 }
-.build-row{
+
+.build-row {
   border: 1px solid #495057;
 }
-.build-col{
+
+.build-col {
   border: 1px solid #495057;
   padding: 0px 3px;
 }
-.error-message{
+
+.error-message {
   color: crimson;
 }
-.page-title{
+
+.page-title {
   padding-top: 5px;
 }
-.rarity-SSR{
+
+.rarity-SSR {
   color: gold;
 }
-.rarity-SR{
+
+.rarity-SR {
   color: mediumslateblue;
+}
+
+.loader {
+  border: 8px solid #343a40;
+  border-top: 8px solid #6c757d;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 2s linear infinite;
+  margin: 20px auto 10px;
+  position: relative;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
