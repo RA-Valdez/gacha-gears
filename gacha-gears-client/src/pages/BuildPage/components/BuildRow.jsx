@@ -1,9 +1,11 @@
 // Modules
 import axios from "axios";
 import { Button, Col, Row, Stack } from "react-bootstrap";
+import Cookies from 'universal-cookie';
 
 export default function BuildRow(props) {
   axios.defaults.withCredentials = true;
+  const cookies = new Cookies(null, { path: '/' });
   function getRelicNames(relicArray) {
     var nameArray = [];
     for (const k of relicArray) {
@@ -34,12 +36,12 @@ export default function BuildRow(props) {
         });
     }
   }
-
+  
   const buildRow = (
     <Row className="justify-content-center">
       <Col xs={10} className={"build-col rarity-" + props.build.character.rarity}><strong className="align-middle">{props.build.character.name}</strong></Col>
       <Col xs={2} className="build-col">
-        <Stack direction="horizontal" gap="1" className="justify-content-center">
+        {props.build.lb || cookies.get('public-token') ? (<Stack direction="horizontal" gap="1" className="justify-content-center">
           <Button
             variant="outline-secondary"
             size="sm"
@@ -54,7 +56,7 @@ export default function BuildRow(props) {
           >
             <i className="bi bi-trash-fill" />
           </Button>
-        </Stack>
+        </Stack>) : <p className="text-center m-0 p-0">(Site Build)</p>}
       </Col>
       <Col xs={12} md={3} className="build-col">{getRelicNames(props.build.relic)}</Col>
       <Col xs={12} md={2} className="build-col">{props.build.ornament.name}</Col>
