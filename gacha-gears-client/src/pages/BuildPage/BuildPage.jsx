@@ -59,8 +59,8 @@ export default function BuildPage() {
         buildList = (
           <Container className="build-row">
             <Row className="justify-content-center">
-              <Col xs={10} className="build-col"><strong>Character</strong></Col>
-              <Col xs={2} className="build-col text-center"><strong>Actions</strong></Col>
+              <Col xs={9} className="build-col"><strong>Character</strong></Col>
+              <Col xs={3} className="build-col text-center"><strong>Actions</strong></Col>
               <Col xs={12} md={3} className="build-col text-center"><strong>Relic(s)</strong></Col>
               <Col xs={12} md={2} className="build-col text-center"><strong>Ornament</strong></Col>
               <Col xs={3} md className="build-col text-center"><strong>Body</strong></Col>
@@ -88,8 +88,8 @@ export default function BuildPage() {
               <h4>{obj.zone.name}</h4>
               <Container className="build-row justify-content-center">
                 <Row>
-                  <Col xs={10} md={3} className="build-col"><strong>Character</strong></Col>
-                  <Col xs={2} md={{ span: 2, order: 1 }} className="build-col text-center"><strong>Actions</strong></Col>
+                  <Col xs={9} md={3} className="build-col"><strong>Character</strong></Col>
+                  <Col xs={3} md={{ span: 2, order: 1 }} className="build-col text-center"><strong>Actions</strong></Col>
                   <Col xs={3} md={2} className="build-col text-center"><strong>Body</strong></Col>
                   <Col xs={3} md={2} className="build-col text-center"><strong>Feet</strong></Col>
                   <Col xs={6} md={3} className="build-col text-center"><strong>Substats</strong></Col>
@@ -128,8 +128,8 @@ export default function BuildPage() {
               <h4>{obj.zone.name}</h4>
               <Container className="build-row justify-content-center">
                 <Row>
-                  <Col xs={10} md={3} className="build-col"><strong>Character</strong></Col>
-                  <Col xs={2} md={{ span: 2, order: 1 }} className="build-col text-center"><strong>Actions</strong></Col>
+                  <Col xs={9} md={3} className="build-col"><strong>Character</strong></Col>
+                  <Col xs={3} md={{ span: 2, order: 1 }} className="build-col text-center"><strong>Actions</strong></Col>
                   <Col xs={3} md={2} className="build-col text-center"><strong>Sphere</strong></Col>
                   <Col xs={3} md={2} className="build-col text-center"><strong>Rope</strong></Col>
                   <Col xs={6} md={3} className="build-col text-center"><strong>Substats</strong></Col>

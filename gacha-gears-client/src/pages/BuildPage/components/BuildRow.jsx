@@ -36,12 +36,12 @@ export default function BuildRow(props) {
         });
     }
   }
-  
+
   const buildRow = (
     <Row className="justify-content-center">
-      <Col xs={10} className={"build-col rarity-" + props.build.character.rarity}><strong className="align-middle">{props.build.character.name}</strong></Col>
-      <Col xs={2} className="build-col">
-        {props.build.lb || cookies.get('public-token') ? (<Stack direction="horizontal" gap="1" className="justify-content-center">
+      <Col xs={9} className={"build-col rarity-" + props.build.character.rarity}><strong className="align-middle">{props.build.character.name}</strong></Col>
+      <Col xs={3} className="build-col">
+        {props.build.lb || cookies.get('public-token') ? (<Stack direction="horizontal" gap="1" className="justify-content-center" style={{ height: "100%" }}>
           <Button
             variant="outline-secondary"
             size="sm"
@@ -56,7 +56,7 @@ export default function BuildRow(props) {
           >
             <i className="bi bi-trash-fill" />
           </Button>
-        </Stack>) : <p className="text-center m-0 p-0">(Site Build)</p>}
+        </Stack>) : <p className="text-center m-0 p-0"></p>}
       </Col>
       <Col xs={12} md={3} className="build-col">{getRelicNames(props.build.relic)}</Col>
       <Col xs={12} md={2} className="build-col">{props.build.ornament.name}</Col>
@@ -70,7 +70,7 @@ export default function BuildRow(props) {
 
   const relicRow = (
     <Row>
-      <Col xs={10} md={3} className="build-col">
+      <Col xs={9} md={3} className="build-col">
         <strong className={"align-middle rarity-" + props.build.character.rarity}>{props.build.character.name}</strong>
         {props.build.relic.length > 1 && props.relicID === props.build.relic[0]._id ?
           <span className="align-middle">
@@ -83,8 +83,8 @@ export default function BuildRow(props) {
             : ""
         }
       </Col>
-      <Col xs={2} md={{ span: 2, order: 1 }} className="build-col text-center">
-        <Stack direction="horizontal" gap="1" className="justify-content-center">
+      <Col xs={3} md={{ span: 2, order: 1 }} className="build-col text-center">
+        {props.build.lb || cookies.get('public-token') ? (<Stack direction="horizontal" gap="1" className="justify-content-center" style={{ height: "100%" }}>
           <Button
             variant="outline-secondary"
             size="sm"
@@ -99,7 +99,7 @@ export default function BuildRow(props) {
           >
             <i className="bi bi-trash-fill" />
           </Button>
-        </Stack>
+        </Stack>) : <p className="text-center m-0 p-0"></p>}
       </Col>
       <Col xs={3} md={2} className="build-col text-center">{props.build.body}</Col>
       <Col xs={3} md={2} className="build-col text-center">{props.build.feet}</Col>
@@ -109,11 +109,11 @@ export default function BuildRow(props) {
 
   const ornamentRow = (
     <Row>
-      <Col xs={10} md={3} className="build-col">
+      <Col xs={9} md={3} className="build-col">
         <strong className={"align-middle rarity-" + props.build.character.rarity}>{props.build.character.name}</strong>
       </Col>
-      <Col xs={2} md={{ span: 2, order: 1 }} className="build-col text-center">
-        <Stack direction="horizontal" gap="1" className="justify-content-center">
+      <Col xs={3} md={{ span: 2, order: 1 }} className="build-col text-center">
+      {props.build.lb || cookies.get('public-token') ? (<Stack direction="horizontal" gap="1" className="justify-content-center" style={{ height: "100%" }}>
           <Button
             variant="outline-secondary"
             size="sm"
@@ -128,7 +128,7 @@ export default function BuildRow(props) {
           >
             <i className="bi bi-trash-fill" />
           </Button>
-        </Stack>
+        </Stack>) : <p className="text-center m-0 p-0"></p>}
       </Col>
       <Col xs={3} md={2} className="build-col text-center">{props.build.sphere}</Col>
       <Col xs={3} md={2} className="build-col text-center">{props.build.rope}</Col>
