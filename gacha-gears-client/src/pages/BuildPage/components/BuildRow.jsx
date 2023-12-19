@@ -39,8 +39,8 @@ export default function BuildRow(props) {
 
   const buildRow = (
     <Row className="justify-content-center">
-      <Col xs={9} className={"build-col rarity-" + props.build.character.rarity}><strong className="align-middle">{props.build.character.name}</strong></Col>
-      <Col xs={3} className="build-col">
+      <Col xs={9} md={10} className={"build-col rarity-" + props.build.character.rarity}><strong className="align-middle">{props.build.character.name}</strong></Col>
+      <Col xs={3} md={2} className="build-col">
         {props.build.lb || cookies.get('public-token') ? (<Stack direction="horizontal" gap="1" className="justify-content-center" style={{ height: "100%" }}>
           <Button
             variant="outline-secondary"
