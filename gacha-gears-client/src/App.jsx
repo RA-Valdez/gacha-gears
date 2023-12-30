@@ -1,7 +1,7 @@
 // Modules
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BrowserRouter, Outlet } from 'react-router-dom';
-import { Container, Modal } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 import Cookies from 'universal-cookie';
 
 // Components
@@ -18,12 +18,13 @@ function App() {
   axios.defaults.withCredentials = true;
   const cookies = new Cookies(null, { path: '/' });
   const [publicToken, setPublicToken] = useState(cookies.get('public-token'));
-  const [showModal, setShowModal] = useState((!sessionStorage.getItem("session") ? true : false));
 
-  function handleModal() {
-    !sessionStorage.setItem("session", "session");
-    setShowModal(false);
-  }
+  useEffect(() => {
+    if (localStorage.getItem('localBuilds')) {
+      localStorage.setItem('LB_HSR', localStorage.getItem('localBuilds'));
+      localStorage.removeItem('localBuilds');
+    }
+  }, []);
 
   function handleLogout() {
     axios.post(`${import.meta.env.VITE_API_ADDRESS}/users/logout`)
@@ -36,18 +37,6 @@ function App() {
       <Container>
         <Router username={publicToken} setPublicToken={setPublicToken} /><Outlet context={[setPublicToken]} />
       </Container>
-      <Modal show={showModal} onHide={handleModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>Site Information</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>This site stores builds you add, locally to your device.
-          <hr /> The (Site Builds) are just general suggestion and may not be the most optimized builds. <hr /> Planned Updates:
-          <ul>
-            <li>Local Build backup and restore</li>
-            <li>Build Sorting</li>
-            <li>Stats input auto-complete</li>
-          </ul></Modal.Body>
-      </Modal>
     </BrowserRouter>
   )
 }

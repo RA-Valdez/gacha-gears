@@ -62,13 +62,13 @@ export default function BuildForm(props) {
         clearFields();
         // Test Guest Add
         if (!res.data.msg) {
-          var localbuilds = JSON.parse(localStorage.getItem("localBuilds"));
+          var localbuilds = JSON.parse(localStorage.getItem('LB_HSR'));
           if (!localbuilds) {
             localbuilds = [res.data];
-            localStorage.setItem("localBuilds", JSON.stringify(localbuilds));
+            localStorage.setItem('LB_HSR', JSON.stringify(localbuilds));
           } else {
             localbuilds.push(res.data);
-            localStorage.setItem("localBuilds", JSON.stringify(localbuilds));
+            localStorage.setItem('LB_HSR', JSON.stringify(localbuilds));
           }
         }
         // Get UpdatedBuilds
@@ -85,10 +85,10 @@ export default function BuildForm(props) {
       .then((res) => {
         clearFields();
         if (!res.data.msg) {
-          var localbuilds = JSON.parse(localStorage.getItem("localBuilds"));
+          var localbuilds = JSON.parse(localStorage.getItem('LB_HSR'));
           var target = localbuilds.findIndex((i) => i._id === res.data._id);
           localbuilds[target] = res.data;
-          localStorage.setItem("localBuilds", JSON.stringify(localbuilds));
+          localStorage.setItem('LB_HSR', JSON.stringify(localbuilds));
         }
         props.setEdit({ isEditing: false, build: "" });
         props.getBuilds();

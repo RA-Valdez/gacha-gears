@@ -17,7 +17,7 @@ export default function BuildPage() {
   var buildList;
 
   function getBuilds() {
-    axios.post(`${import.meta.env.VITE_API_ADDRESS}/builds/${viewMode}/${localOnly}`, JSON.parse(localStorage.getItem('localBuilds')))
+    axios.post(`${import.meta.env.VITE_API_ADDRESS}/builds/${viewMode}/${localOnly}`, JSON.parse(localStorage.getItem('LB_HSR')))
       .then((res) => {
         setBuilds(res.data);
       })

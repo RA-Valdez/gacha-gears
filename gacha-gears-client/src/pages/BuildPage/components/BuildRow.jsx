@@ -21,10 +21,10 @@ export default function BuildRow(props) {
 
   function handleDelete() {
     if (props.build.lb) {
-      var localbuilds = JSON.parse(localStorage.getItem("localBuilds"));
+      var localbuilds = JSON.parse(localStorage.getItem('LB_HSR'));
       var target = localbuilds.findIndex((i) => i._id === props.build._id);
       localbuilds.splice(target, 1);
-      localStorage.setItem("localBuilds", JSON.stringify(localbuilds));
+      localStorage.setItem('LB_HSR', JSON.stringify(localbuilds));
       props.getBuilds();
     } else {
       axios.delete(`${import.meta.env.VITE_API_ADDRESS}/builds/${props.build._id}`)
