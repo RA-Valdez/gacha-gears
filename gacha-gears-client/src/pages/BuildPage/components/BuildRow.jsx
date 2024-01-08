@@ -25,7 +25,7 @@ export default function BuildRow(props) {
   }
 
   function handleCopy() {
-    const {_id, lb, ...copiedBuild} = props.build;
+    const copiedBuild = {...props.build, _id: "", lb: false};
     props.setEdit({ isEditing: false, build: copiedBuild });
   }
 
