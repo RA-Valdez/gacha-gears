@@ -13,20 +13,20 @@ import NoPage from '../pages/NoPage';
 export default function Router(props) {
   const devRoutes = (
     <Routes>
-      <Route path="/" Component={BuildPage} />
-      <Route path='/characters' Component={CharacterPage} />
-      <Route path='/zones' Component={ZonePage} />
-      <Route path='/relics' Component={RelicPage} />
-      <Route path='/ornaments' Component={OrnamentPage} />
-      <Route path='*' Component={NoPage} />
+      <Route path="/" element={<BuildPage username={props.username} />} />
+      <Route path='/characters' element={<CharacterPage />} />
+      <Route path='/zones' element={<ZonePage />} />
+      <Route path='/relics' element={<RelicPage />} />
+      <Route path='/ornaments' element={<OrnamentPage />} />
+      <Route path='*' element={<NoPage />} />
     </Routes>
   )
 
   const guestRoutes = (
     <Routes>
-      <Route path="/" Component={BuildPage} />
+      <Route path="/" element={<BuildPage />} />
       <Route path="/login" element={<LogInPage setPublicToken={props.setPublicToken} />} />
-      <Route path='*' Component={NoPage} />
+      <Route path='*' element={<NoPage />} />
     </Routes>
   )
 

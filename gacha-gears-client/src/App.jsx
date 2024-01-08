@@ -35,7 +35,7 @@ function App() {
     <BrowserRouter>
       <MainNav username={publicToken} handleLogout={handleLogout} />
       <Container>
-        <Router username={publicToken} setPublicToken={setPublicToken} /><Outlet context={[setPublicToken]} />
+        <Router username={publicToken} setPublicToken={setPublicToken} />
       </Container>
     </BrowserRouter>
   )

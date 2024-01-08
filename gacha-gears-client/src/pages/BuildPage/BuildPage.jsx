@@ -2,13 +2,14 @@
 import axios from "axios";
 import React from "react";
 import { useEffect, useState } from "react";
-import { Button, ButtonGroup, Col, Container, Row, Modal, Stack, Form, Alert } from "react-bootstrap";
+import { Button, ButtonGroup, Col, Container, Row, Stack, Form, Alert } from "react-bootstrap";
 // Components
 import BuildForm from "./components/BuildForm";
 import BuildRow from "./components/BuildRow";
 
-export default function BuildPage() {
+export default function BuildPage(props) {
   axios.defaults.withCredentials = true;
+  const username = props.username;
   const [builds, setBuilds] = useState();
   const [fields, setFields] = useState([]);
   const [edit, setEdit] = useState({ isEditing: false, build: "" });
@@ -76,6 +77,7 @@ export default function BuildPage() {
                 getBuilds={getBuilds}
                 setEdit={setEdit}
                 viewMode={viewMode}
+                username={username}
               />
             )}
           </Container>
@@ -109,6 +111,7 @@ export default function BuildPage() {
                             setEdit={setEdit}
                             viewMode={viewMode}
                             relicID={relic.relic._id}
+                            username={username}
                           />
                         )}
                       </React.Fragment>
@@ -148,6 +151,7 @@ export default function BuildPage() {
                             getBuilds={getBuilds}
                             setEdit={setEdit}
                             viewMode={viewMode}
+                            username={username}
                           />
                         )}
                       </React.Fragment>

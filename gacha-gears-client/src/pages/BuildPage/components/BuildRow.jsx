@@ -25,7 +25,7 @@ export default function BuildRow(props) {
   }
 
   function handleCopy() {
-    const copiedBuild = {...props.build, _id: "", lb: false};
+    const copiedBuild = { ...props.build, _id: "", lb: false };
     props.setEdit({ isEditing: false, build: copiedBuild });
   }
 
@@ -48,7 +48,12 @@ export default function BuildRow(props) {
   }
 
   const actionStack = (
-    <Stack direction="horizontal" gap="1" className="justify-content-center" style={{ height: "100%" }}>
+    <Stack
+      direction="horizontal"
+      gap="1"
+      className="justify-content-center"
+      style={{ height: "100%", }}
+    >
       <OverlayTrigger
         placement="top"
         overlay={renderTooltip("Copy")}
@@ -89,11 +94,22 @@ export default function BuildRow(props) {
           </OverlayTrigger>
         </>) : <p className="text-center m-0 p-0"></p>}
     </Stack>
-  )
+  );
+
+  function getbuildOwner() {
+    if (props.username) {
+      return (
+        <span className="align-middle">{props.build.lb ? "(Local) " : "(Admin) "}</span>
+      );
+    }
+  };
 
   const buildRow = (
     <Row className="justify-content-center">
-      <Col xs={9} md={10} className={"build-col rarity-" + props.build.character.rarity}><strong className="align-middle">{props.build.character.name}</strong></Col>
+      <Col xs={9} md={10} className="build-col">
+        {getbuildOwner()}
+        <strong className={"align-middle rarity-" + props.build.character.rarity}>{props.build.character.name}</strong>
+      </Col>
       <Col xs={3} md={2} className="build-col">
         {actionStack}
       </Col>
@@ -110,6 +126,7 @@ export default function BuildRow(props) {
   const relicRow = (
     <Row>
       <Col xs={9} md={3} className="build-col">
+        {getbuildOwner()}
         <strong className={"align-middle rarity-" + props.build.character.rarity}>{props.build.character.name}</strong>
         {props.build.relic.length > 1 && props.relicID === props.build.relic[0]._id ?
           <span className="align-middle">
@@ -134,6 +151,7 @@ export default function BuildRow(props) {
   const ornamentRow = (
     <Row>
       <Col xs={9} md={3} className="build-col">
+        {getbuildOwner()}
         <strong className={"align-middle rarity-" + props.build.character.rarity}>{props.build.character.name}</strong>
       </Col>
       <Col xs={3} md={{ span: 2, order: 1 }} className="build-col text-center">

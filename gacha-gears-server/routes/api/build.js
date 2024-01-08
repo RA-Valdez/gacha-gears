@@ -126,7 +126,7 @@ router.get('/:id', (req, res) => {
 });
 
 // POST new
-router.post('/', asyncHandler(async (req, res) => {
+router.post('/admin', asyncHandler(async (req, res) => {
   const isAdmin = await verifyAdmin(req.cookies.token);
   if (!isAdmin) {
     req.body.lb = true;
