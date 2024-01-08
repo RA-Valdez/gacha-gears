@@ -1,11 +1,17 @@
 // Modules
 import axios from "axios";
-import { Button, Col, Row, Stack } from "react-bootstrap";
+import { Button, Col, OverlayTrigger, Row, Stack, Tooltip } from "react-bootstrap";
 import Cookies from 'universal-cookie';
 
 export default function BuildRow(props) {
   axios.defaults.withCredentials = true;
   const cookies = new Cookies(null, { path: '/' });
+  const renderTooltip = (text) => (
+    <Tooltip>
+      {text}
+    </Tooltip>
+  );
+
   function getRelicNames(relicArray) {
     var nameArray = [];
     for (const k of relicArray) {
@@ -15,8 +21,12 @@ export default function BuildRow(props) {
   }
 
   function handleEdit() {
-    //console.log(props.build);
     props.setEdit({ isEditing: true, build: props.build });
+  }
+
+  function handleCopy() {
+    const {_id, lb, ...copiedBuild} = props.build;
+    props.setEdit({ isEditing: false, build: copiedBuild });
   }
 
   function handleDelete() {
@@ -37,26 +47,55 @@ export default function BuildRow(props) {
     }
   }
 
+  const actionStack = (
+    <Stack direction="horizontal" gap="1" className="justify-content-center" style={{ height: "100%" }}>
+      <OverlayTrigger
+        placement="top"
+        overlay={renderTooltip("Copy")}
+      >
+        <Button
+          variant="outline-secondary"
+          size="sm"
+          onClick={handleCopy}
+        >
+          <i className="bi bi-copy" />
+        </Button>
+      </OverlayTrigger>
+      {props.build.lb || cookies.get('public-token') ? (
+        <>
+          <OverlayTrigger
+            placement="top"
+            overlay={renderTooltip("Edit")}
+          >
+            <Button
+              variant="outline-secondary"
+              size="sm"
+              onClick={handleEdit}
+            >
+              <i className="bi bi-pencil-fill" />
+            </Button>
+          </OverlayTrigger>
+          <OverlayTrigger
+            placement="top"
+            overlay={renderTooltip("Delete")}
+          >
+            <Button
+              variant="outline-danger"
+              size="sm"
+              onClick={handleDelete}
+            >
+              <i className="bi bi-trash-fill" />
+            </Button>
+          </OverlayTrigger>
+        </>) : <p className="text-center m-0 p-0"></p>}
+    </Stack>
+  )
+
   const buildRow = (
     <Row className="justify-content-center">
       <Col xs={9} md={10} className={"build-col rarity-" + props.build.character.rarity}><strong className="align-middle">{props.build.character.name}</strong></Col>
       <Col xs={3} md={2} className="build-col">
-        {props.build.lb || cookies.get('public-token') ? (<Stack direction="horizontal" gap="1" className="justify-content-center" style={{ height: "100%" }}>
-          <Button
-            variant="outline-secondary"
-            size="sm"
-            onClick={handleEdit}
-          >
-            <i className="bi bi-pencil-fill" />
-          </Button>
-          <Button
-            variant="outline-danger"
-            size="sm"
-            onClick={handleDelete}
-          >
-            <i className="bi bi-trash-fill" />
-          </Button>
-        </Stack>) : <p className="text-center m-0 p-0"></p>}
+        {actionStack}
       </Col>
       <Col xs={12} md={3} className="build-col">{getRelicNames(props.build.relic)}</Col>
       <Col xs={12} md={2} className="build-col">{props.build.ornament.name}</Col>
@@ -84,22 +123,7 @@ export default function BuildRow(props) {
         }
       </Col>
       <Col xs={3} md={{ span: 2, order: 1 }} className="build-col text-center">
-        {props.build.lb || cookies.get('public-token') ? (<Stack direction="horizontal" gap="1" className="justify-content-center" style={{ height: "100%" }}>
-          <Button
-            variant="outline-secondary"
-            size="sm"
-            onClick={handleEdit}
-          >
-            <i className="bi bi-pencil-fill" />
-          </Button>
-          <Button
-            variant="outline-danger"
-            size="sm"
-            onClick={handleDelete}
-          >
-            <i className="bi bi-trash-fill" />
-          </Button>
-        </Stack>) : <p className="text-center m-0 p-0"></p>}
+        {actionStack}
       </Col>
       <Col xs={3} md={2} className="build-col text-center">{props.build.body}</Col>
       <Col xs={3} md={2} className="build-col text-center">{props.build.feet}</Col>
@@ -113,22 +137,7 @@ export default function BuildRow(props) {
         <strong className={"align-middle rarity-" + props.build.character.rarity}>{props.build.character.name}</strong>
       </Col>
       <Col xs={3} md={{ span: 2, order: 1 }} className="build-col text-center">
-      {props.build.lb || cookies.get('public-token') ? (<Stack direction="horizontal" gap="1" className="justify-content-center" style={{ height: "100%" }}>
-          <Button
-            variant="outline-secondary"
-            size="sm"
-            onClick={handleEdit}
-          >
-            <i className="bi bi-pencil-fill" />
-          </Button>
-          <Button
-            variant="outline-danger"
-            size="sm"
-            onClick={handleDelete}
-          >
-            <i className="bi bi-trash-fill" />
-          </Button>
-        </Stack>) : <p className="text-center m-0 p-0"></p>}
+        {actionStack}
       </Col>
       <Col xs={3} md={2} className="build-col text-center">{props.build.sphere}</Col>
       <Col xs={3} md={2} className="build-col text-center">{props.build.rope}</Col>

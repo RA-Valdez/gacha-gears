@@ -72,6 +72,7 @@ export default function BuildForm(props) {
           }
         }
         // Get UpdatedBuilds
+        props.setEdit({ isEditing: false, build: "" });
         props.getBuilds();
       })
       .catch((err) => {
@@ -127,7 +128,7 @@ export default function BuildForm(props) {
   }
 
   useEffect(() => {
-    if (props.edit.isEditing) {
+    if (props.edit.build) {
       setID(props.edit.build._id);
       setCharacter(props.edit.build.character._id);
       setRarity("rarity-" + props.edit.build.character.rarity);
