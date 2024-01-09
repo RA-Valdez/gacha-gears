@@ -125,18 +125,28 @@ router.get('/:id', (req, res) => {
     .catch(err => res.status(404).json({ nobuildfound: 'No Build found' }));
 });
 
-// POST new
+// POST new admin build
 router.post('/admin', asyncHandler(async (req, res) => {
   const isAdmin = await verifyAdmin(req.cookies.token);
   if (!isAdmin) {
+    res.sendStatus(401);
+  }
+  else {
+    Builds.create(req.body)
+      .then(build => res.json({ msg: 'Build added successfully' }))
+      .catch(err => res.sendStatus(400));
+  }
+}));
+
+// POST new local build
+router.post('/local', asyncHandler(async (req, res) => {
+  try {
     req.body.lb = true;
     const build = new Builds(req.body);
     res.json(build);
+  } catch (e) {
+    res.sendStatus(400);
   }
-  else
-    Builds.create(req.body)
-      .then(build => res.json({ msg: 'Build added successfully' }))
-      .catch(err => res.status(400).json({ error: 'Unable to add this build' }));
 }));
 
 // PUT in ID

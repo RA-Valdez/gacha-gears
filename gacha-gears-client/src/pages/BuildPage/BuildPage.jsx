@@ -176,6 +176,7 @@ export default function BuildPage(props) {
         edit={edit}
         setEdit={setEdit}
         viewMode={viewMode}
+        username={username}
       />
       <br />
       <ButtonGroup className="w-100">

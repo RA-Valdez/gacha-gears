@@ -48,28 +48,47 @@ export default function BuildForm(props) {
       lb: lb,
     };
     if (relic2 != "" && relic2 != relic1) build.relic.push(relic2);
-    if (props.edit.isEditing) {
-      build._id = id;
-      handleEdit(build);
-    } else handleAdd(build);
+    switch (e.nativeEvent.submitter.id) {
+      case "add_admin":
+        handleAddAdmin(build);
+        break;
+      case "add_local":
+        handleAddLocal(build);
+        break;
+      case "edit_build":
+        build._id = id;
+        handleEdit(build);
+        break;
+    }
     formRef.current.focus();
   }
 
-  function handleAdd(build) {
+  function handleAddAdmin(build) {
     axios
-      .post(`${import.meta.env.VITE_API_ADDRESS}/builds`, build)
+      .post(`${import.meta.env.VITE_API_ADDRESS}/builds/admin`, build)
       .then((res) => {
         clearFields();
-        // Test Guest Add
-        if (!res.data.msg) {
-          var localbuilds = JSON.parse(localStorage.getItem('LB_HSR'));
-          if (!localbuilds) {
-            localbuilds = [res.data];
-            localStorage.setItem('LB_HSR', JSON.stringify(localbuilds));
-          } else {
-            localbuilds.push(res.data);
-            localStorage.setItem('LB_HSR', JSON.stringify(localbuilds));
-          }
+        // Get UpdatedBuilds
+        props.setEdit({ isEditing: false, build: "" });
+        props.getBuilds();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  function handleAddLocal(build) {
+    axios
+      .post(`${import.meta.env.VITE_API_ADDRESS}/builds/local`, build)
+      .then((res) => {
+        clearFields();
+        var localbuilds = JSON.parse(localStorage.getItem('LB_HSR'));
+        if (!localbuilds) {
+          localbuilds = [res.data];
+          localStorage.setItem('LB_HSR', JSON.stringify(localbuilds));
+        } else {
+          localbuilds.push(res.data);
+          localStorage.setItem('LB_HSR', JSON.stringify(localbuilds));
         }
         // Get UpdatedBuilds
         props.setEdit({ isEditing: false, build: "" });
@@ -208,10 +227,18 @@ export default function BuildForm(props) {
       <Row className="build-form-row">
         <Col>
           <Stack direction="horizontal" gap="1" className="justify-content-end">
-            <Button type="submit" variant="outline-primary" disabled={!isValid}>
-              {props.edit.isEditing ? "Edit" : "Add"}
+            <Button type="submit" id="add_admin" variant="outline-primary" disabled={!isValid} hidden={props.username == undefined || props.edit.isEditing}>
+              Add as Admin
             </Button>
-            <Button variant="outline-danger" onClick={handleCancel} hidden={!props.edit.isEditing}>Cancel</Button>
+            <Button type="submit" id="add_local" variant="outline-primary" disabled={!isValid} hidden={props.edit.isEditing}>
+              {props.username ? "Add as Locally" : "Add"}
+            </Button>
+            <Button type="submit" id="edit_build" variant="outline-primary" disabled={!isValid} hidden={!props.edit.isEditing}>
+              Edit
+            </Button>
+            <Button variant="outline-danger" onClick={handleCancel} hidden={!props.edit.isEditing}>
+              Cancel
+            </Button>
           </Stack>
         </Col>
       </Row>
