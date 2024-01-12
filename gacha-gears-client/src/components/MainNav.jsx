@@ -90,7 +90,7 @@ export default function MainNav(props) {
       </Modal.Header>
       <Modal.Body>This site stores builds you add, locally to your device.
         <hr />
-        The (Site Builds) are just general suggestion and may not be the most optimized builds.
+        The GachaGear Builds are just general suggestion and may not be the most optimized builds.
       </Modal.Body>
     </>
   )

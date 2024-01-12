@@ -12,60 +12,193 @@ const { default: mongoose, Document } = require('mongoose');
 
 router.get('/test', (req, res) => res.send('builds route testing!'));
 
-// GET ALL
-router.post('/builds/:local', asyncHandler(async (req, res) => {
-  var buildsArr = [];
-  if (req.params.local == "false") buildsArr = await Builds.find({}, "-__v");
-  try {
-    for (let c of req.body) {
-      buildsArr.push(new Builds(c));
-    }
-  } catch (err) { /*console.log("no req array");*/ }
-  buildsArr = await Builds.populate(buildsArr, { path: "character", select: "name rarity" });
-  buildsArr = await Builds.populate(buildsArr, { path: "relic", select: "name" });
-  buildsArr = await Builds.populate(buildsArr, { path: "ornament", select: "name" });
-  res.json(buildsArr);
-}));
+// Combined Builds
+router.post('/', asyncHandler(async (req, res) => {
+  // Variables
+  const filter = req.body.filter;
+  const buildSort = req.body.buildSort;
+  const view = req.body.view;
+  const areaSort = req.body.areaSort;
+  const localBuilds = req.body.localBuilds;
+  var allBuilds = [];
+  var areaObject = [];
+  var resObject;
 
-// Grouped by Relics
-router.post('/relics/:local', asyncHandler(async (req, res, next) => {
-  var resObject = [];
+  // Build Sort Functions
+  function BLBd(d1, d2) {
+    const str1 = "" + d1._id;
+    const str2 = "" + d2._id;
+    return str2.localeCompare(str1);
+  }
+  function BLBu(d1, d2) {
+    const str1 = "" + d1._id;
+    const str2 = "" + d2._id;
+    return str1.localeCompare(str2);
+  }
+  function BLCd(d1, d2) {
+    const str1 = "" + d1.character._id;
+    const str2 = "" + d2.character._id;
+    return str2.localeCompare(str1);
+  }
+  function BLCu(d1, d2) {
+    const str1 = "" + d1.character._id;
+    const str2 = "" + d2.character._id;
+    return str1.localeCompare(str2);
+  }
+  function BCNd(d1, d2) {
+    const str1 = "" + d1.character.name;
+    const str2 = "" + d2.character.name;
+    return str1.localeCompare(str2);
+  }
+  function BCNu(d1, d2) {
+    const str1 = "" + d1.character.name;
+    const str2 = "" + d2.character.name;
+    return str2.localeCompare(str1);
+  }
+  function BCRd(d1, d2) {
+    const str1 = "" + d1.character.rarity;
+    const str2 = "" + d2.character.rarity;
+    return str2.localeCompare(str1);
+  }
+  function BCRu(d1, d2) {
+    const str1 = "" + d1.character.rarity;
+    const str2 = "" + d2.character.rarity;
+    return str1.localeCompare(str2);
+  }
+  // Area Sort Functions
+  function ALAd(d1, d2) {
+    const str1 = "" + d1.zone._id;
+    const str2 = "" + d2.zone._id;
+    return str2.localeCompare(str1);
+  }
+  function ALAu(d1, d2) {
+    const str1 = "" + d1.zone._id;
+    const str2 = "" + d2.zone._id;
+    return str1.localeCompare(str2);
+  }
+  function AANd(d1, d2) {
+    const str1 = "" + d1.zone.name;
+    const str2 = "" + d2.zone.name;
+    return str1.localeCompare(str2);
+  }
+  function AANu(d1, d2) {
+    const str1 = "" + d1.zone.name;
+    const str2 = "" + d2.zone.name;
+    return str2.localeCompare(str1);
+  }
 
-  const [zones, relics] = await Promise.all([
-    Zones.find({ type: "Relic" }).exec(),
-    Relics.find().exec(),
-  ]);
-
-  var builds = [];
-  if (req.params.local == "false") builds = await Builds.find({}, "-__v");
-
-  try {
-    for (let c of req.body) {
-      builds.push(new Builds(c));
-    }
-  } catch (err) { /*console.log("no req array");*/ }
-  builds = await Builds.populate(builds, { path: "character", select: "name rarity" });
-  builds = await Builds.populate(builds, { path: "relic", select: "name" });
-  builds = await Builds.populate(builds, { path: "ornament", select: "name" });
-
-  for (const zone in zones) {
-    const relicArr = [];
-    for (const relic in relics) {
-      if (relics[relic].zone.toString() === zones[zone]._id.toString()) {
-        const buildArr = [];
-        for (const build in builds) {
-          //console.log(builds[build]);
-          if (builds[build].relic[0]._id.toString() === relics[relic]._id.toString()) {
-            buildArr.push(builds[build]);
-          } else if (builds[build].relic[builds[build].relic.length - 1]._id.toString() === relics[relic]._id.toString()) {
-            buildArr.push(builds[build]);
+  // Main Logic
+  // Build Gathering
+  if (filter == "all" || filter == "admin") {
+    allBuilds = await Builds.find({}, "-__v");
+  }
+  if (filter == "all" || filter == "local") {
+    try {
+      for (let build of localBuilds) allBuilds.push(new Builds(build));
+    } catch (err) { }
+  }
+  // Build Population
+  allBuilds = await Builds.populate(allBuilds, { path: "character", select: "name rarity" });
+  allBuilds = await Builds.populate(allBuilds, { path: "relic", select: "name" });
+  allBuilds = await Builds.populate(allBuilds, { path: "ornament", select: "name" });
+  // Build Sorting
+  allBuilds.sort(BLBd);
+  switch (buildSort) {
+    case "BLBd":
+      allBuilds.sort(BLBd);
+      break;
+    case "BLBu":
+      allBuilds.sort(BLBu);
+      break;
+    case "BLCd":
+      allBuilds.sort(BLCd);
+      break;
+    case "BLCu":
+      allBuilds.sort(BLCu);
+      break;
+    case "BCNd":
+      allBuilds.sort(BCNd);
+      break;
+    case "BCNu":
+      allBuilds.sort(BCNu);
+      break;
+    case "BCRd":
+      allBuilds.sort(BCRd);
+      break;
+    case "BCRu":
+      allBuilds.sort(BCRu);
+      break;
+  }
+  // View
+  switch (view) {
+    case "Builds":
+      resObject = allBuilds;
+      break;
+    case "Relics":
+      var [zones, relics] = await Promise.all([
+        Zones.find({ type: "Relic" }).exec(),
+        Relics.find().exec(),
+      ]);
+      for (const zone in zones) {
+        const relicArr = [];
+        for (const relic in relics) {
+          if (relics[relic].zone.toString() === zones[zone]._id.toString()) {
+            const buildArr = [];
+            for (const build in allBuilds) {
+              //console.log(allBuilds[build]);
+              if (allBuilds[build].relic[0]._id.toString() === relics[relic]._id.toString()) {
+                buildArr.push(allBuilds[build]);
+              } else if (allBuilds[build].relic[allBuilds[build].relic.length - 1]._id.toString() === relics[relic]._id.toString()) {
+                buildArr.push(allBuilds[build]);
+              }
+            }
+            if (buildArr.length > 0) relicArr.push({ relic: relics[relic], builds: buildArr });
           }
         }
-        if (buildArr.length > 0) relicArr.push({ relic: relics[relic], builds: buildArr });
+        if (relicArr.length > 0) areaObject.push({ zone: zones[zone], relics: relicArr });
       }
-    }
-    if (relicArr.length > 0) resObject.push({ zone: zones[zone], relics: relicArr });
+      break;
+    case "Ornaments":
+      var [zones, ornaments] = await Promise.all([
+        Zones.find({ type: "Ornament" }).exec(),
+        Ornaments.find().exec(),
+      ]);
+      for (const zone in zones) {
+        const ornamentArr = [];
+        for (const ornament in ornaments) {
+          if (ornaments[ornament].zone.toString() === zones[zone]._id.toString()) {
+            const buildArr = [];
+            for (const build in allBuilds) {
+              if (allBuilds[build].ornament._id.toString() === ornaments[ornament]._id.toString()) {
+                buildArr.push(allBuilds[build]);
+              }
+            }
+            if (buildArr.length > 0) ornamentArr.push({ ornament: ornaments[ornament], builds: buildArr });
+          }
+        }
+        if (ornamentArr.length > 0) areaObject.push({ zone: zones[zone], ornaments: ornamentArr });
+      }
+      break;
   }
+  // Build Sorting
+  if (view == "Relics" || view == "Ornaments") {
+    switch (areaSort) {
+      case "ALAd":
+        areaObject.sort(ALAd);
+        break;
+      case "ALAu":
+        areaObject.sort(ALAu);
+        break;
+      case "AANd":
+        areaObject.sort(AANd);
+        break;
+      case "AANu":
+        areaObject.sort(AANu);
+        break;
+    }
+    resObject = areaObject;
+  }
+  // Response
   res.json(resObject);
 }));
 

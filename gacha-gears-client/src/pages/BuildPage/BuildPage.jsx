@@ -1,8 +1,7 @@
 // Modules
 import axios from "axios";
-import React from "react";
-import { useEffect, useState } from "react";
-import { Button, ButtonGroup, Col, Container, Row, Stack, Form, Alert } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { Button, ButtonGroup, Col, Container, Row, Stack, Alert, DropdownButton, InputGroup, Dropdown } from "react-bootstrap";
 // Components
 import BuildForm from "./components/BuildForm";
 import BuildRow from "./components/BuildRow";
@@ -14,11 +13,47 @@ export default function BuildPage(props) {
   const [fields, setFields] = useState([]);
   const [edit, setEdit] = useState({ isEditing: false, build: "" });
   const [viewMode, setViewMode] = useState("Builds");
-  const [localOnly, setLocalOnly] = useState(false);
+  const [filter, setFilter] = useState("All");
+  const [bsort, setBsort] = useState("Latest Build");
+  const [bsortDir, setBsortDir] = useState("down");
+  const [asort, setAsort] = useState("Latest Area");
+  const [asortDir, setAsortDir] = useState("down");
   var buildList;
 
   function getBuilds() {
-    axios.post(`${import.meta.env.VITE_API_ADDRESS}/builds/${viewMode}/${localOnly}`, JSON.parse(localStorage.getItem('LB_HSR')))
+    console.log("test");
+    // Get filter
+    var reqFilter;
+    switch (filter) {
+      case "All": reqFilter = "all"; break;
+      case "Local Builds": reqFilter = "local"; break;
+      case "GachaGear Builds": reqFilter = "admin"; break;
+    }
+    // Get buildSort
+    var reqBuildSort;
+    switch (bsort) {
+      case "Latest Build": reqBuildSort = "BLB"; break;
+      case "Latest Character": reqBuildSort = "BLC"; break;
+      case "Character Name": reqBuildSort = "BCN"; break;
+      case "Character Rarity": reqBuildSort = "BCR"; break;
+    }
+    reqBuildSort += bsortDir[0];
+    // Get areaSort
+    var reqAreaSort;
+    switch (asort) {
+      case "Latest Area": reqAreaSort = "ALA"; break;
+      case "Area Name": reqAreaSort = "AAN"; break;
+    }
+    reqAreaSort += asortDir[0];
+
+    const reqObject = {
+      filter: reqFilter,
+      buildSort: reqBuildSort,
+      view: viewMode,
+      areaSort: reqAreaSort,
+      localBuilds: JSON.parse(localStorage.getItem('LB_HSR')),
+    }
+    axios.post(`${import.meta.env.VITE_API_ADDRESS}/builds/`, reqObject)
       .then((res) => {
         setBuilds(res.data);
       })
@@ -39,7 +74,7 @@ export default function BuildPage(props) {
 
   useEffect(() => {
     getBuilds();
-  }, [viewMode, localOnly])
+  }, [viewMode, filter, bsort, bsortDir, asort, asortDir])
 
   if (builds === undefined) {
     buildList = (
@@ -196,17 +231,52 @@ export default function BuildPage(props) {
           active={viewMode === "Ornaments"}
         >Ornaments</Button>
       </ButtonGroup>
-      <Stack direction="horizontal">
-        <h1 className="page-title">{viewMode}</h1>
-        <Form.Check
-          className="ms-auto"
-          type="checkbox"
-          label="Local Builds Only"
-          checked={localOnly}
-          onChange={() => setLocalOnly(!localOnly)}
-          reverse
-        />
+      <hr className="mt-2 mb-2" />
+      <Stack direction="horizontal" gap={2}>
+        <div />
+        <div className="ms-auto">
+          <DropdownButton id="filter-dropdown" title={filter} size="sm" variant="outline-secondary" align="end">
+            <Dropdown.Item onClick={e => setFilter(e.nativeEvent.target.innerHTML)}>All</Dropdown.Item>
+            <Dropdown.Item onClick={e => setFilter(e.nativeEvent.target.innerHTML)}>Local Builds</Dropdown.Item>
+            <Dropdown.Item onClick={e => setFilter(e.nativeEvent.target.innerHTML)}>GachaGear Builds</Dropdown.Item>
+          </DropdownButton>
+        </div>
+        <div>
+          <InputGroup>
+            <DropdownButton id="bsort-dropdown" title={bsort} size="sm" variant="outline-secondary" align="end">
+              <Dropdown.Item onClick={e => {setBsort(e.nativeEvent.target.innerHTML); setBsortDir("down");}}>Latest Build</Dropdown.Item>
+              <Dropdown.Item onClick={e => {setBsort(e.nativeEvent.target.innerHTML); setBsortDir("down");}}>Latest Character</Dropdown.Item>
+              <Dropdown.Item onClick={e => {setBsort(e.nativeEvent.target.innerHTML); setBsortDir("down");}}>Character Name</Dropdown.Item>
+              <Dropdown.Item onClick={e => {setBsort(e.nativeEvent.target.innerHTML); setBsortDir("down");}}>Character Rarity</Dropdown.Item>
+            </DropdownButton>
+            <Button
+              id="filter-direction"
+              size="sm"
+              variant="outline-secondary"
+              onClick={e => bsortDir == "down" ? setBsortDir("up") : setBsortDir("down")}
+            >
+              <i className={"bi bi-sort-" + bsortDir}></i>
+            </Button>
+          </InputGroup>
+        </div>
+        {viewMode != "Builds" ? (<div>
+          <InputGroup>
+            <DropdownButton id="bsort-dropdown" title={asort} size="sm" variant="outline-secondary" align="end">
+              <Dropdown.Item onClick={e => {setAsort(e.nativeEvent.target.innerHTML); setAsortDir("down")}}>Latest Area</Dropdown.Item>
+              <Dropdown.Item onClick={e => {setAsort(e.nativeEvent.target.innerHTML); setAsortDir("down")}}>Area Name</Dropdown.Item>
+            </DropdownButton>
+            <Button
+              id="filter-direction"
+              size="sm"
+              variant="outline-secondary"
+              onClick={e => asortDir == "down" ? setAsortDir("up") : setAsortDir("down")}
+            >
+              <i className={"bi bi-sort-" + asortDir}></i>
+            </Button>
+          </InputGroup>
+        </div>) : ""}
       </Stack>
+      <br />
       {buildList}
     </>
   )
