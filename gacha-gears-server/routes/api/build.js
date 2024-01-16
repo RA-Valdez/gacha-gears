@@ -202,48 +202,10 @@ router.post('/', asyncHandler(async (req, res) => {
   res.json(resObject);
 }));
 
-// Grouped by Ornaments
-router.post('/ornaments/:local', asyncHandler(async (req, res, next) => {
-  var resObject = [];
-  const [zones, ornaments] = await Promise.all([
-    Zones.find({ type: "Ornament" }).exec(),
-    Ornaments.find().exec(),
-  ]);
-
-  var builds = [];
-  if (req.params.local == "false") builds = await Builds.find({}, "-__v");
-
-  try {
-    for (let c of req.body) {
-      builds.push(new Builds(c));
-    }
-  } catch (err) { /*console.log("no req array");*/ }
-  builds = await Builds.populate(builds, { path: "character", select: "name rarity" });
-  builds = await Builds.populate(builds, { path: "relic", select: "name" });
-  builds = await Builds.populate(builds, { path: "ornament", select: "name" });
-
-  for (const zone in zones) {
-    const ornamentArr = [];
-    for (const ornament in ornaments) {
-      if (ornaments[ornament].zone.toString() === zones[zone]._id.toString()) {
-        const buildArr = [];
-        for (const build in builds) {
-          if (builds[build].ornament._id.toString() === ornaments[ornament]._id.toString()) {
-            buildArr.push(builds[build]);
-          }
-        }
-        if (buildArr.length > 0) ornamentArr.push({ ornament: ornaments[ornament], builds: buildArr });
-      }
-    }
-    if (ornamentArr.length > 0) resObject.push({ zone: zones[zone], ornaments: ornamentArr });
-  }
-  res.json(resObject);
-}));
-
 // Get Fields
 router.get('/fields', asyncHandler(async (req, res, next) => {
   const [characters, relics, ornaments, zones] = await Promise.all([
-    Characters.find().select("name rarity").exec(),
+    Characters.find().select("name rarity").sort({ _id: -1 }).exec(),
     Relics.find().select("name").exec(),
     Ornaments.find().select("name").exec(),
     Zones.find().exec(),
@@ -286,16 +248,26 @@ router.post('/local', asyncHandler(async (req, res) => {
 router.put('/:id', asyncHandler(async (req, res) => {
   const isAdmin = await verifyAdmin(req.cookies.token);
   if (req.body.lb) {
-    const build = new Builds(req.body);
-    res.json(build);
+    var build = new Builds(req.body);
+    build._id = new mongoose.Types.ObjectId();
+    res.json({ oid: req.params.id, build: build });
   } else {
     if (!isAdmin) { res.sendStatus(401); }
-    else
-      Builds.findByIdAndUpdate(req.params.id, req.body)
-        .then(build => res.json({ msg: 'Updated successfully' }))
+    else {
+      var build = req.body;
+      build._id = new mongoose.Types.ObjectId();
+      await Builds.findByIdAndRemove(req.params.id)
+        .then(a => {
+          Builds.create(build)
+            .then(build => res.json({ msg: 'Updated successfully' }))
+            .catch(err =>
+              res.status(400).json({ error: 'Unable to update the Database' })
+            );
+        })
         .catch(err =>
           res.status(400).json({ error: 'Unable to update the Database' })
         );
+    }
   }
 }));
 

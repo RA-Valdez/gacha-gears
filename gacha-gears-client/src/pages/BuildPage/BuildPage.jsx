@@ -21,7 +21,6 @@ export default function BuildPage(props) {
   var buildList;
 
   function getBuilds() {
-    console.log("test");
     // Get filter
     var reqFilter;
     switch (filter) {

@@ -106,8 +106,8 @@ export default function BuildForm(props) {
         clearFields();
         if (!res.data.msg) {
           var localbuilds = JSON.parse(localStorage.getItem('LB_HSR'));
-          var target = localbuilds.findIndex((i) => i._id === res.data._id);
-          localbuilds[target] = res.data;
+          var target = localbuilds.findIndex((i) => i._id === res.data.oid);
+          localbuilds[target] = res.data.build;
           localStorage.setItem('LB_HSR', JSON.stringify(localbuilds));
         }
         props.setEdit({ isEditing: false, build: "" });
