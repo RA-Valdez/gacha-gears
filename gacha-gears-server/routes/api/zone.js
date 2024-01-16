@@ -11,7 +11,7 @@ router.get('/test', (req, res) => res.send('zones route testing!'));
 
 // GET ALL
 router.get('/', (req, res) => {
-  Zones.find()
+  Zones.find().sort({_id: -1})
     .then(zones => res.json(zones))
     .catch(err => res.status(404).json({ nozonesfound: 'No Zones found' }));
 });

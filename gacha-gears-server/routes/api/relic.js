@@ -10,7 +10,7 @@ router.get('/test', (req, res) => res.send('relics route testing!'));
 
 // GET ALL
 router.get('/', (req, res) => {
-  Relics.find().populate("zone", "name")
+  Relics.find().sort({_id: -1}).populate("zone", "name")
     .then(relics => res.json(relics))
     .catch(err => res.status(404).json({ norelicsfound: 'No Relics found' }));
 });

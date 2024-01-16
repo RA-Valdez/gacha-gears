@@ -10,7 +10,7 @@ router.get('/test', (req, res) => res.send('ornaments route testing!'));
 
 // GET ALL
 router.get('/', (req, res) => {
-  Ornaments.find().populate("zone", "name")
+  Ornaments.find().sort({_id: -1}).populate("zone", "name")
     .then(ornaments => res.json(ornaments))
     .catch(err => res.status(404).json({ noornamentsfound: 'No Ornaments found' }));
 });

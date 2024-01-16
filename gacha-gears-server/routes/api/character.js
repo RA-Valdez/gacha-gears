@@ -10,7 +10,7 @@ router.get('/test', (req, res) => res.send('characters route testing!'));
 
 // GET ALL
 router.get('/', (req, res) => {
-  Characters.find()
+  Characters.find().sort({_id: -1})
     .then(characters => res.json(characters))
     .catch(err => res.status(404).json({ nocharactersfound: 'No Characters found' }));
 });
