@@ -206,8 +206,8 @@ router.post('/', asyncHandler(async (req, res) => {
 router.get('/fields', asyncHandler(async (req, res, next) => {
   const [characters, relics, ornaments, zones] = await Promise.all([
     Characters.find().select("name rarity").sort({ _id: -1 }).exec(),
-    Relics.find().select("name").exec(),
-    Ornaments.find().select("name").exec(),
+    Relics.find().select("name").sort({ _id: -1 }).exec(),
+    Ornaments.find().select("name").sort({ _id: -1 }).exec(),
     Zones.find().exec(),
   ]);
   res.json({ characters: characters, relics: relics, ornaments: ornaments, zones: zones });
