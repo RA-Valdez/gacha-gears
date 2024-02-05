@@ -151,6 +151,7 @@ export default function MainNav(props) {
             &nbsp;
             <img src={ggoWide} className="logo d-inline-block align-top" alt="GachaGears.online" />
           </Navbar.Brand>
+          <Navbar.Text><strong>{props.game}</strong></Navbar.Text>
           {props.username ? <Navbar.Text>Admin Mode</Navbar.Text> : <></>}
           <Stack direction='horizontal' gap={2}>
             <Button

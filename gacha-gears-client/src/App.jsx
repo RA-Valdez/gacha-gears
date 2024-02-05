@@ -7,6 +7,7 @@ import Cookies from 'universal-cookie';
 // Components
 import MainNav from './components/MainNav';
 import Router from './components/Router';
+import Footer from './components/Footer'
 
 // Assets
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -33,10 +34,13 @@ function App() {
 
   return (
     <BrowserRouter>
-      <MainNav username={publicToken} handleLogout={handleLogout} />
-      <Container>
-        <Router username={publicToken} setPublicToken={setPublicToken} />
-      </Container>
+      <div className="d-flex flex-column h-100">
+        <MainNav username={publicToken} handleLogout={handleLogout} game="Honkai: Star Rail" />
+        <Container className="pb-3">
+          <Router username={publicToken} setPublicToken={setPublicToken} />
+        </Container>
+        <Footer />
+      </div>
     </BrowserRouter>
   )
 }
