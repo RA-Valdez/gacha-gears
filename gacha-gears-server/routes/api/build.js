@@ -145,7 +145,6 @@ router.post('/', asyncHandler(async (req, res) => {
           if (relics[relic].zone.toString() === zones[zone]._id.toString()) {
             const buildArr = [];
             for (const build in allBuilds) {
-              //console.log(allBuilds[build]);
               if (allBuilds[build].relic[0]._id.toString() === relics[relic]._id.toString()) {
                 buildArr.push(allBuilds[build]);
               } else if (allBuilds[build].relic[allBuilds[build].relic.length - 1]._id.toString() === relics[relic]._id.toString()) {
