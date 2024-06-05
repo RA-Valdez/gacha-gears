@@ -1,4 +1,5 @@
 # GachaGears
+Accessible at: https://gachagears.online
 
 This is a personal project to learn the MERN stack.
 This web app is used to create a list of builds for the game Honkai Star Rail (and other games in the future).
